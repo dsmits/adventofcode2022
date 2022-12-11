@@ -3,10 +3,6 @@ export analyze_list
 export count_calories
 export get_total_top_calories
 
-    function retrieve_list(path::String)
-        f = open(path)
-        readlines(f)
-    end
 
     function count_calories(list)
         current_max = 0
@@ -38,8 +34,7 @@ export get_total_top_calories
         sum(sorted[begin:top_n])
     end
 
-    function answer(path)
-        list = retrieve_list(path)
+    function answer(list)
         counts = count_calories(list)
         # Answer 1
         top_calories = max(counts...)
