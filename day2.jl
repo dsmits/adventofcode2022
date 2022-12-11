@@ -1,12 +1,12 @@
 module Day2
-export is_win, compute_score
+export is_win, compute_score, answer
 
 
     ShapeScore = Dict{String, Integer}("X"=>1, "Y"=>2, "Z"=>3)
     WinningMoves = Dict{String, String}("A"=> "Y", "B"=> "Z", "C"=>"X")
     LosingMoves = Dict{String, String}("A"=> "Z", "B"=> "X", "C"=>"Y")
     MoveMapping = Dict{String, String}("A"=>"X", "B"=>"Y", "C"=>"Z")
-    OutcomeScore = Dict{String, Integer}("X"=> 0, "Y"=>3, "Z" =>6)
+    OutcomeScore = Dict{String, Integer}("X"=>0, "Y"=> 3, "Z" => 6)
     
 
     function is_win(opponent::String, my_move::String)
@@ -34,17 +34,32 @@ export is_win, compute_score
 
     end
 
+    function compute_second_score(opponent_move, outcome)
+        score = OutcomeScore[outcome]
+
+        if outcome == "X"
+            shape = LosingMoves[opponent_move]
+        elseif outcome == "Y"
+            shape = MoveMapping[opponent_move]
+        elseif outcome == "Z"
+            shape = WinningMoves[opponent_move]
+        end
+        score + ShapeScore[shape]
+
+    end
 
     function answer(list)
-        score_1 = 0
-        
+        score1 = 0
+        score2 = 0
+
         for line in list
             splitted = split(line, " ")
             opponent_move, my_move = @. String(splitted)
-            score_1 += compute_score(opponent_move, my_move)
+            score1 += compute_score(opponent_move, my_move)
+            score2 += compute_second_score(opponent_move, my_move)
         end
 
-        return score_1
+        return score1, score2
     end
 
 end
